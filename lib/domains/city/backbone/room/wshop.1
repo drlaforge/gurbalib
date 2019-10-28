@@ -1,0 +1,111 @@
+/* Wishbone September 2004 - converted to standard shop */
+
+#include <tune.h>
+inherit ROOM+"std_shop";
+
+void setup(void) 
+{
+   
+   
+
+  set_light(1);
+  set_outdoors(0);
+  short_desc = "Dark Alley weapon shop";
+  set_long_f(
+    "The local weapon comparement and supply shop. "+
+    "To compare your weapons type: 'compare <weapon 1> and <weapon 2>. "+
+    "It costs 150 dollars to compare them. "+
+    "Type 'list' to see available weapons to buy. "+
+    "You can also sell your weapons here.\n");
+  dest_dir =
+    ({
+      ROOM+"south_alley5","east",
+    });
+   set_reply_mess("The shopkeeper says: ");
+   set_store_exit("north");
+}
+
+init()
+{
+ ::init();
+ add_action("sell_it","sell");
+ add_action("compare","compare");
+}
+
+compare(str) 
+{
+  object w1,w2;
+  int wc1,wc2;
+  string wname1,wname2;
+  string cr1,cr2;
+
+  if(str && sscanf(str,"%s and %s",wname1,wname2) != 2 &&
+     sscanf(str,"%s with %s",wname1,wname2) != 2 &&
+     sscanf(str,"%s to %s",wname1,wname2) != 2) {
+    write("Usage: compare <weapon 1> and <weapon 2>.\n");
+    return 1;
+  }
+  if(this_player()->query_money() < 150) {
+    write("The comparement costs 150 dollars, which you don't have.\n");
+    return 1;
+  }
+  if(!(w1 = present(lowercase(wname1),this_player()))) {
+    write("You don't have a " + capitalize(wname1) + ".\n");
+    return 1;
+  }
+  if(!(w2 = present(lowercase(wname2),this_player()))) {
+    write("You don't have a " + capitalize(wname2) + ".\n");
+    return 1;
+  }
+  if(!w1->weapon_class()) {
+    write(capitalize(wname1) + " is not a weapon.\n");
+    return 1;
+  }
+  if(!w2->weapon_class()) {
+    write(capitalize(wname2) + " is not a weapon.\n");
+    return 1;
+  }
+  wc1 = w1->weapon_class();
+  wc2 = w2->weapon_class();
+
+  if(w1->query_two_handed())
+    wc1 = wc1/2;
+  if(w2->query_two_handed())
+    wc2 = wc2/2;
+
+  if(wc1 > wc2) 
+    write(w1->short() + " seems to be the best.\n");
+  else if(wc1 == wc2) 
+    write("They seem to be equally good.\n");
+  else
+    write(w2->short() + " seems to be the best.\n");
+  cr1 = creator(w1);
+  if(!cr1)
+    cr1 = "Some factory";
+  cr2 = creator(w2);
+  if(!cr2)
+    cr2 = "Some factory";
+  write(" - "+capitalize(cr1) + " created " + w1->short() + ", and\n");
+  write(" - "+capitalize(cr2) + " created " + w2->short() + ".\n");
+  this_player()->add_money(-150);
+  return 1;
+}
+
+sell_it(str) 
+{
+  object w;
+  int value;
+  if(!str)
+    return 0;
+  if(!(w = present(str,this_player()))) 
+   {
+    write("You don't have it.\n");
+    return 1;
+   }
+  if(!w->weapon_class()) 
+   {
+    write("We only trade weapons here.\n");
+    return 1;
+   }
+ return 0;
+}

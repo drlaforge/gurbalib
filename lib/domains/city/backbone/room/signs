@@ -1,0 +1,82 @@
+adam_street3.c:    "You see a sign saying 'McDonalds' to the west.\n", 78);
+adam_street3.c:  add_item("sign", "As you suspected, it says 'McDonalds'");
+adam_street3.c:  add_readable("sign");
+adv_guild.c:    "sign on the eastern wall which explains how to raise your statistics "+
+adv_guild.c:         "sign", "#show_sign",
+adv_guild.c:    add_readable("sign");
+adv_guild.c:show_sign() {
+adv_inner.c:    "information about who is designing what area and about the concerns "+
+alley1.c:    "throws long pale shadows on the ground. A sign on the\n"+
+alley1.c:  add_item("sign", "A dirty sign with the text: 'Keep out! This domain belongs to the\n"+
+alley_01.c:"The alley continues southwards. There is a sign saying\n"+
+alley_01.c:"'STOCKMARKET' pointing to the west, but a smaller sign\n"+
+alley_01.c:      "sign","The sign is pointing westwards, into a smaller alley",
+alleybar.c:    write("A sign says: SOLD OUT!\n");
+boul5.c:        + "To the east you can see building with a sign on\n"
+boul5.c:        + "to the west you can see building with a sign on\n"
+boul6.c:	"around, constructing new areas. You also see a sign,\n"+
+boul6.c:	      "and grease fill your nose.","sign","The sign is pointing"+
+boul6.c:  if (str != "sign")
+boul6.c:  command ("exa sign",this_player());
+building.c:    ({"sign","large sign"}),
+building.c:       "#mysign",
+building.c:mysign(str) {
+building.c:  if (!(str=="sign")) return 0;
+casino.c:			"And makes you want to blow money on some of the games. There is a large sign here that might be "+
+casino.c:	add_item(({"large sign","sign"}),
+casino.c:"And if you're looking for the poker instructions, try 'read sign'.\n"+"\n"+
+central_under2.c:    "are to the south, and there is a sign above them warning you against "+
+central_under2.c:    "sign", "The sign reads:\n"+
+church.c:		"specifically designed for the artificial duplication of "+
+clst3.c:                "road is blocked by a fence. There is a large sign on the fence.\n" +
+clst3.c:            "sign", "Read the sign.",
+clst3.c:    if (str != "sign") return 0;
+clst3.c:        write ( "The sign reads:\n" +
+coast7.c:	"of jetties designed for smaller ships and ferries. "+
+coast8.c:	"of jetties designed for smaller ships and ferries. "+
+coast9.c:	"of jetties designed for smaller ships and ferries. "+
+darkalley1.c:        + "Further west you can see a neon sign, flashing\n"
+darkalley1.c:  items_arr = ({"sign","It's makes the gloomy alley a little bit more light but\n"
+darkalley2.c:        + "north which has a flashing neon sign above the door.\n"
+darkalley2.c:    items_arr = ({"sign","A really cool sign. It says: Buddy's Bar!",
+east_end.c:    "sign that says: VOTE FOR INTEGRATION.\n";
+east_end.c:      "sign","It says: VOTE FOR INTEGRATION",
+east_up.c:    "A sign is nailed on the eastern wall.\n";
+east_up.c:  if(str == "at sign") {
+east_up.c:  write("The man hands you a paper, and after you sign he grins evilly.\n");
+eve_street1.c:  add_item("sign", "The sign shows the word ROULETTE in various flashing colors");
+eve_street1.c:"particularly large and annoying sign stating:\n"+
+gas.c:	add_item( ({ "flickering sign", "flickering neon sign", "neon sign", "sign" }),
+gas.c:		"A large sign high above you that read: StormTech Gas");
+jokesboard.c:      "sign you could read.\n");
+jokesboard.c:   add_item(({"sign"}),
+jokesboard.c:  add_action("sign_desc","read");
+jokesboard.c:sign_desc(str)
+jokesboard.c:  if(!str || (str != "sign")) 
+jokesboard.c:  tell_room(TO,(TP->QN+" reads the sign.\n"),({TP}));
+laser_shop.c:		   "The store itself is very spartan in design, the entire structure being "+
+laser_shop.c:		 "The laserweapons in the display case range in model and design from the first\n"+
+restaurant.c:* designing your own pubs. You may inherit this file
+south_alley2.c:    "You see a sign: 'GAS STATION -> EAST'.\n";
+south_alley2.c:  if(str=="at sign") {
+south_alley2.c:    write("The sign reads: GAS STATION EAST.\n");
+south_alley2.c:  if(str == "sign")
+swampe1.c:   add_action("mysign","read");
+swampe1.c:        + "A rickety old sign stands here.\n";
+swampe1.c:     ({"sign","rickety sign","old sign","rickety old sign"}),
+swampe1.c:         "A very old sign, it looks like it dates back to before the wars.\nDespite its age, the sign is still readable.",
+swampe1.c:mysign(str) {
+swampe1.c:   if (!(str=="sign")) return 0;
+swampe1.c:	say(this_player()->query_name()+" is looking at the sign.\n");
+weigh.c:	     "sign is attached below the slot");
+weigh.c:    add_item(({"little sign", "sign"}),
+weigh.c:	     "A small sign with some writing. Maybe you should read it");
+weigh.c:    add_message("read", ({"sign", "little sign"}),
+weigh.c:	        "reads the sign."); 
+west_end2.c:        "see a large sign to the south of here. You might want to read it.\n");
+west_end2.c:	      "sign",
+west_end2.c:		"A large sign to the south of here you should read",
+west_square1.c:     "glowing pub sign, part way up the alley. There is a sense "+
+west_square1.c:      ({"sign","pub sign","glowing pub sign","glowing sign"}),
+west_square1.c:      "You can't make it out from here, but it is definitly a pub sign.",
+west_street3.c:      "signs of wear, as though it has been abandonded once again.\n");

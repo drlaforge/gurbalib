@@ -1,0 +1,186 @@
+inherit ROOM+"guildroom";
+
+#include <tune.h>
+
+static string male_title_str,fem_title_str; /*get_new_title()*/
+static object ob2, ob, board;
+
+init() {
+  ::init(); /* !important! */
+  /* ----- called in ROOM+"guildroom": (Do this in your guild)----- */
+    add_action("cost_for_level", "cost");
+    add_action("adv_advance", "advance");
+    add_action("list_quests", "list");
+
+  /* ----- called in this room: ----- */
+    add_action("south", "south");
+}
+
+void setup(void) {
+              /* if reboot: */
+  set_light (1);
+  short_desc = "the mob gang headquarters";
+  set_long_f(
+    "You are standing in an old and dirty lecture room. Scattered around "+
+    "this place are a couple of broken chairs and tables that no one has "+
+    "bothered to clean up. A large unbroken window to the east lets in the "+
+    "sunshine to lighten up this otherwise gloomy place. There is a large "+
+    "sign on the eastern wall which explains how to raise your statistics "+
+    "and/or level. A wooden staircase leads up to the veterans' room and "+
+    "down to the cellar. The opening in the southern wall has many laser "+
+    "criss-crossing it, barring entry.\n");
+    dest_dir = ({ ROOM+"school_entr", "north",0,
+		  ROOM+"adv_cellar", "down",0,
+                  ROOM+"adv_vet","up","#vet",
+		  ROOM+"announce","west",0,
+	        });
+     items_arr = ({
+       ({"chairs","tables"}), "They look broken and unusable.",
+       "window","It is unbroken, unlike everything else in this room",
+       ({"staircase","wooden staircase"}), "It is made from wood",
+       ({"laser","laser beams","opening"}),
+           "The laser beams block the way south.",
+       "sign",
+        "            Welcome to the Mob's gang headquarters!\n"+
+	"This is where you come to gain statistics and levels if you are\n"+
+	"not a member of another gang. If you are, then please go to your\n"+
+	"your respective gang headquarters.\n"+
+	"Commands:\n"+
+	"    advance [level, str, int, dex, con] <to raise them.>\n"+
+          "    list (number)  <to see what the quests are.>",
+	});
+
+  /* --- book --- */
+  move_object(clone_object("std/object/book"), this_object());
+
+  /* --- voter --- */
+  /* move_object(clone_object("std/object/voter"), this_object()); */
+
+ /* --- board --- */
+  board = clone_object("obj/board");
+  move_object(board,  this_object());
+  board -> set_save_path("boards/bulletin");
+  board -> set_max_notes(50);
+  board -> set_delete_level (ARCH_LEVEL-1);
+  board -> set_show_levels(ROOKIE_LEVEL-1);
+  /* --- guild first quest --- */
+  ob = clone_object("obj/quest_obj");
+  ob->set_name("headcutter");
+  ob->set_hint(
+    "Dennis, the hooded man, is angry with the Devils because they killed\n"+
+    "his family and burned down his home. Help him get revenge.\n");
+  ob->set_qp(10);
+  move_object(ob, ROOM+"quest_room");
+  /* --- guild 2nd quest --- 
+     ob2 = clone_object("obj/quest_obj");
+     ob2->set_name("cemetary");
+     ob2->set_hint(
+     "Help Cliff Burton with his dilemma. He lives in the old house in\n"+
+     "the cemetary north of the church.\n");
+     ob2->set_qp(20);
+     move_object(ob2, ROOM+"quest_room");
+     I don't think this quest fits in with the theme. */
+}
+
+adv_advance(str) 
+{
+  object ob;
+  ob = present("gang_object",this_player());
+  if(ob) 
+  {
+    write ("You should advance in the "+ob->query_gang()+".\n");
+    return 1; 
+  }
+  return advance(str);  /* from the /room/guildroom */
+}
+
+south() 
+{
+  if(call_other(this_player(), "query_level", 0) < APP_LEVEL) 
+  {
+    write("The laser beams effectively stops you.\n");
+    say(this_player()->query_name()+
+	" tried to go through the laser beams, but failed.\n");
+    return 1;
+  }
+  write(
+    "As you approach the door, the lasers shut off and you walk through.\n"+
+    "A mechanized voice announces: 'Welcome SPOK-member'\n");
+  this_player()->move_player("south#room/adv_inner");
+  return 1;
+}
+
+vet() 
+{
+  if (this_player()->query_level() >= VET_LEVEL)
+    return 0;
+  write("I am sorry, but that room is for veterans only.\n");
+  say(this_player()->query_name()+
+      " tries to enter the veterans room but fails.\n");
+  return 1;
+}
+/* ---------- DEFINE SPECIFIC GUILD-TITLES -----------------
+ * You must make this function in your guildroom and inherit
+ * ROOM+"guildroom" and add_action() some functions (see this init())
+ * get_new_title() should take gender,level as two arguments and
+ * return the correct title. How you retrieve the title is
+ * up to you. In this case we make three arrays.
+ *
+ *           Thorwald 920414
+ */
+
+get_new_title(gender, lvl) 
+{
+  if(!male_title_str) 
+  {
+    male_title_str = allocate(20);
+    male_title_str[19]  ="apprentice veteran";
+    male_title_str[18]	="the grand master slasher";
+    male_title_str[17]	="the obvious winner";
+    male_title_str[16]	="the dangerous streetlord";
+    male_title_str[15]	="the master butcher";
+    male_title_str[14]	="the licenced executer";
+    male_title_str[13]	="the silent executer";
+    male_title_str[12]	="the terrifying master of violence";
+    male_title_str[11]	="the dangerous assassin";
+    male_title_str[10]	="the beginner assassin";
+    male_title_str[9]	="the experienced murderer";
+    male_title_str[8]	="the promising murderer";
+    male_title_str[7]	="the dangerous warrior";
+    male_title_str[6]	="the experienced warrior";
+    male_title_str[5]	="the warrior";
+    male_title_str[4]	="the violent rebel";
+    male_title_str[3]	="the experienced streetfighter";
+    male_title_str[2]	="the promising streetfighter";
+    male_title_str[1]	="the new streetfighter";
+    male_title_str[0]	="the newcomer";
+    
+    fem_title_str = allocate(20);
+    fem_title_str[19]   ="apprentice veteran";
+    fem_title_str[18]	="the grand master slasherinn";
+    fem_title_str[17]	="the obvious winner";
+    fem_title_str[16]	="the dangerous streetlady";
+    fem_title_str[15]	="the master butcher";
+    fem_title_str[14]	="the licenced executer";
+    fem_title_str[13]	="the silent executer";
+    fem_title_str[12]	="the terrifying mistress of violence";
+    fem_title_str[11]	="the dangerous assassin";
+    fem_title_str[10]	="the beginner assassin";
+    fem_title_str[9]	="the experienced murderer";
+    fem_title_str[8]	="the promising murderer";
+    fem_title_str[7]	="the dangerous warlady";
+    fem_title_str[6]	="the experienced warlady";
+    fem_title_str[5]	="the warlady";
+    fem_title_str[4]	="the violent rebel";
+    fem_title_str[3]	="the experienced streetfighter";
+    fem_title_str[2]	="the promising streetfighter";
+    fem_title_str[1]	="the new streetfighter";
+    fem_title_str[0]	="the newcomer";
+    
+  }
+  if (gender==1) return male_title_str[lvl];	/* -- male -- */
+  if (gender==2) return fem_title_str[lvl];	/* -- female -- */
+  return 0;    /* if failed */
+}
+
+query_peace() { return 1; }
