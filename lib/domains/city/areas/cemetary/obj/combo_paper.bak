@@ -1,0 +1,32 @@
+inherit "obj/obj";
+#include "../area.h"
+
+int *padlock_combo;
+
+reset(arg)
+{
+::reset(arg);
+if(arg)
+  return;
+
+padlock_combo=add_array(0,({random(50),random(50),random(50)}));
+
+set_short("piece of paper");
+set_long_f("A small, torn piece of paper big enough only to hold the following text: "+
+ padlock_combo[0]+"-"+padlock_combo[1]+"-"+padlock_combo[2]+".\n",FORMAT);
+set_value(0);
+set_weight(0);
+set_get(1);
+}
+
+id(str)
+{
+return 
+ str=="piece" ||
+ str=="paper" ||
+ str=="piece of paper" ||
+ str=="torn piece" ||
+ str=="small torn piece" ||
+ str=="torn piece of paper" ||
+ str=="small torn piece of paper";
+}

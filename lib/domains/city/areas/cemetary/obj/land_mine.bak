@@ -1,0 +1,47 @@
+inherit "obj/explosive";
+#include "../area.h"
+
+reset(arg)
+{
+::reset(arg);
+if(arg)
+  return;
+set_name("land mine");
+set_short("a land mine");
+set_long_f("A land mine. You could dig a hole and 'plant' it.",FORMAT);
+set_id("mine");
+set_weight(1);
+set_value(150+random(120));
+set_get(1);
+
+set_strength(5+random(10));
+}
+
+init()
+{
+::init();
+add_action("cmd_plant","plant");
+}
+
+cmd_plant(str)
+{
+object hole,trigger;
+
+if(!id(str))
+  return 0;
+hole=present("hole",environment(this_player()));
+if(!hole)
+  return write("There is no hole to plant the "+str+" in.\n");
+if(source_file_name(hole)!="obj/hole")
+  return write("You can't plant it in that hole.\n");
+write("You turn on the land mine and carefully place it in the hole.\n");
+say(this_player()->query_name()+" carefully places something in the hole.\n");
+transfer(this_object(),hole);
+set_get(0);
+trigger=clone_object(CEMETARY+OBJ+"land_mine_trigger");
+trigger->set_strength(strength);
+trigger->set_the_land_mine(this_object());
+move_object(trigger,environment(this_player()));
+trigger->set_ok_to_go_off(1);
+return 1;
+}

@@ -1,0 +1,20 @@
+inherit "obj/explosive";
+#include "../area.h"
+
+object the_land_mine;
+int ok_to_go_off;
+
+init()
+{
+::init();
+if(!ok_to_go_off)
+  return;
+write("You set off a land mine!\n");
+if(objectp(the_land_mine))
+  destruct(the_land_mine);
+set_name("the land mine");
+explode_me();
+}
+
+set_the_land_mine(ob){ the_land_mine=ob; }
+set_ok_to_go_off(x){ ok_to_go_off=x; }

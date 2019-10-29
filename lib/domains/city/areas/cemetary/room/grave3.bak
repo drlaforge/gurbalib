@@ -1,0 +1,114 @@
+/* Note: Since I didn't put this grave in, I have put the
+land mine in elsewhere. It won't be in this dir anymore. */
+
+inherit "room/room"; /* Hole with land mine. */
+#include "../area.h"
+
+int treasure_stolen;
+int coffin_open;
+
+reset(arg)
+{
+::reset(arg);
+if(arg)
+  return;
+set_outdoors(1);
+set_light(1);
+set_short("A hole");
+}
+
+id(str)
+{
+if(::id(str))
+  return 1;
+if(!coffin_open)
+  if(str=="coffin" || str=="rotting coffin" || str=="top of a rotting coffin")
+    return 1;
+if(coffin_open)
+  if(str=="coffin" || str=="open coffin" || str=="corpse" || str=="rotting corpse")
+    return 1;
+if(!treasure_stolen && coffin_open)
+  return str=="mine" || 
+    str=="land mine";
+}
+
+long(str)
+{
+switch(str)
+  {
+  case 0:
+    if(!coffin_open)
+      writef("The hole is close to two metres deep. "+
+        "At the bottom, the top of a rotting coffin is exposed.",FORMAT);
+    else
+      writef("The hole is close to two metres deep. "+
+        "At the bottom, is an open coffin which contains a rotting "+
+        "corpse",FORMAT);
+    break;
+  case "coffin":
+    if(!coffin_open)
+      write("The top of a rotting coffin. It could be opened.\n");
+    else
+      write("An open coffin. Inside is a rotting corpse.\n");
+    break;
+  case "rotting coffin": case "top of a rotting coffin":
+    write("The top of a rotting coffin. It could be opened.\n");
+    break;
+  case "open coffin":
+    write("An open coffin. Inside is a rotting corpse.\n");
+    break;
+  case "corpse": case "rotting corpse":
+    write("A rotting corpse. A land mine is nestled dangerously "+
+      "in its armpit.\n");
+    break;
+  case "mine": case "land mine":
+    write("A land mine nestled dangerously in the armpit of the rotting corpse. "+
+      "It could be stolen.\n");
+    break;
+  }
+::long(str);
+}
+
+init()
+{
+::init();
+add_action("cmd_steal","steal");
+add_action("cmd_open","open");
+}
+
+cmd_steal(str)
+{
+object treasure;
+
+if(str!="mine" && str!="land mine")
+  return 0;
+if(treasure_stolen)
+  return 0;
+if(!coffin_open)
+  return 0;
+treasure=clone_object(CEMETARY+OBJ+"land_mine");
+if(!transfer(treasure,this_player()))
+  {
+  write("You carefully extract the "+str+" from the armpit of the rotting corpse.\n");
+  say(this_player()->query_name()+" carefully extracts the "+str+" from the "+
+    "armpit of the rotting corpse.\n");
+  treasure_stolen=1;
+  return 1;
+  }
+if(treasure)
+  destruct(treasure);
+write("You fail to steal the "+str+".\n");
+return 1;
+}
+
+cmd_open(str)
+{
+if(str!="coffin" && str!="rotting coffin" && str!="top of a rotting coffin")
+  return 0;
+if(coffin_open)
+  return 0;
+write("You open the "+str+" as it crumbles hopelessly apart.\n");
+say(this_player()->query_name()+" opens the "+str+" as it crumbles hopelessly apart.\n");
+coffin_open=1;
+return 1;
+}
