@@ -15,3 +15,4 @@ void create(void) {
    set_language("english");
 /* no need to do this: set_skill("language/engilsh",100); */
 }
+

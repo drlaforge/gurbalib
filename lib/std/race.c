@@ -21,17 +21,18 @@ int has_darkvision(void) {
 void create(void) {
    ::create();
 
-   base_stat_minimum["str"] = 3;
-   base_stat_minimum["con"] = 3;
-   base_stat_minimum["dex"] = 3;
-   base_stat_minimum["int"] = 3;
-   base_stat_minimum["wis"] = 3;
-   base_stat_minimum["cha"] = 3;
+   base_stat_minimum["str"] = 1;
+   base_stat_minimum["con"] = 1;
+   base_stat_minimum["dex"] = 1;
+   base_stat_minimum["int"] = 1;
+   base_stat_minimum["wis"] = 1;
+   base_stat_minimum["cha"] = 1;
 
-   base_stat_maximum["str"] = 33;
-   base_stat_maximum["con"] = 33;
-   base_stat_maximum["dex"] = 33;
-   base_stat_maximum["int"] = 33;
-   base_stat_maximum["wis"] = 33;
-   base_stat_maximum["cha"] = 33;
+   base_stat_maximum["str"] = 50;
+   base_stat_maximum["con"] = 50;
+   base_stat_maximum["dex"] = 50;
+   base_stat_maximum["int"] = 50;
+   base_stat_maximum["wis"] = 50;
+   base_stat_maximum["cha"] = 50;
 }
+

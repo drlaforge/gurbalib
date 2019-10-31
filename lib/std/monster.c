@@ -1,8 +1,8 @@
 #include <type.h>
 
 inherit con "/std/container";
-inherit bod "/std/body";
-inherit "/std/body/skills";
+inherit bod "/std/mon_body";
+inherit "/std/mon_body/skills";
 
 inherit "/std/modules/m_messages";
 inherit "/std/modules/m_actions";
@@ -197,4 +197,5 @@ void add_coins(string type, int amt) {
       coins->move(this_object());
    }
 }
+
 

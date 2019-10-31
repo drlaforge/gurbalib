@@ -85,6 +85,7 @@ static void main(string str) {
    }
 
    write("Performing warm boot.");
+   DRIVER->broadcast("Updating game driver and systems. Please wait.");
    write("Recompiling the warmboot command..");
    compile_object(base_name());
 
@@ -235,6 +236,7 @@ void next_stage(int count, object player) {
 
    if (error) {
       player->message("Something went wrong, aborting.");
+      DRIVER->broadcast("Update aborted.");
       if (caught_error()) {
          player->tell(caught_error(1));
       }
@@ -243,6 +245,7 @@ void next_stage(int count, object player) {
       stage = call_out("next_stage", 0, ++count, player);
    } else {
       player->message("Done.");
+      DRIVER->broadcast("Updated successfully.");
    }
 }
 
