@@ -560,3 +560,7 @@ void create(void) {
    light = 1;
    setup();
 }
+
+void affect_long(string str) {
+long_desc = long_desc+str;
+}

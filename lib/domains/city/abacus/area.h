@@ -10,3 +10,7 @@
 
 #define RSTART     "/domains/required/rooms/"
 
+/*area loading*/
+#define LOAD_CEM 1
+/*end of area loading*/
+

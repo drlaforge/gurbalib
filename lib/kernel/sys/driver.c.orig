@@ -776,21 +776,3 @@ int touch(object ob, string func) {
    return _touch(allocate(query_tls_size()), ob, func);
 }
 
-/*added by Exash 19.10.31*/
-int broadcast(string msg)
-{
-object *plrs;
-int i, size;
-plrs = USER_D->query_players();
-size = sizeof(plrs);
-if (size == 0)
-{
-return 0;
-}
-for (i = 0; i < size; i++)
-{
-plrs[i]->message(msg+"\n");
-}
-return 1;
-}
-

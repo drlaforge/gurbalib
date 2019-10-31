@@ -1,0 +1,272 @@
+/* Mugg (part of new backbone December 1993) */
+/* TG exit added to backbone - Wishbone 090996 */
+/* Snickher the Old resurrected! 100217 */
+
+#include <std.h>
+#include <tune.h>
+/*#include <free_kill.h>*/
+
+inherit "/std/room";
+object          ob, snick, freekill, pumpkin;
+string          myname;
+int             lamp_is_lit, time_from_reset, last_reset_cycle;
+int             list_length;
+int             inetd_loaded;
+int		reboot_loaded;
+
+query_time(){ return time_from_reset; }
+void setup(void)
+{
+    object          ob;
+    if (time_from_reset)
+	last_reset_cycle = time() - time_from_reset;
+    time_from_reset = time();
+    if (arg)
+	return;
+
+/*
+ if(!present("tree", this_object()))
+ move_object(clone_object("/players/sigmund/tree/tree"), this_object());
+*/
+
+    ob = clone_object("/obj/acidrain");	/* weather detector */
+    move_object(ob, this_object());
+
+		if (!snick) {
+    	snick = clone_object("/players/snickher/snickher.c");
+    	move_object(snick, this_object());
+		}
+
+		if (FREE_KILL && !freekill) {
+			freekill = clone_object(CHURCH_OBJECT);
+			move_object(freekill, this_object());
+		}
+
+		/* Halloween pumpkin object */
+/*		if (FREE_KILL && !pumpkin) {
+			pumpkin = clone_object("/domains/freekill/obj/pumpkin_collector");
+			move_object(pumpkin, this_object());
+		}
+*/
+
+/*
+    if(!present("snick", this_object()))
+    move_object(clone_object("/obj/snickher/snickher"),this_object());
+*/
+
+    set_light(1);
+    short_desc = "the cryogenic facility";
+    set_long_f("You are standing in a large laboratory that has been "+
+		"specifically designed for the artificial duplication of "+
+		"living beings. A number of capsules and vats line the "+
+		"northern wall, connected to a vast array of electronic "+
+		"control systems by a deluge of wires and cables. There "+
+		"is a monitor attached to the east wall which illustrates "+
+		"how to begin the cloning process. A small vdu flickers in "+
+		"front of you, and there is a constant hum in the air. "+
+		"A spiralling staircase with the words TOURGUIDE OFFICE "+
+		"engraved upon it leads down. You get the feeling that "+
+		"this is a very good place for a NEWBIE to get a good "+
+		"start.\n");
+    items_arr = ({ 
+	"staircase","Please check in with the Tour Guide office\n"+
+			"down the stairs for details and a tour!",
+	({"computers", "systems", "control systems", 
+	"electronic control systems"}),
+	"The control system consists of a number of computers which have been\n" +
+	"programmed to copy the genetic structure of a living being. You\n" +
+	"notice a red button on the keypad in front of you",
+	"keypad","A keypad that is used to initialise the cloning process",
+	({"button", "red button"}),
+	"The button has the word 'CLONE' stamped upon it",
+	"vats",
+      	"The vats contain the chemicals required to formulate a duplicate\n" +
+	     		"entity in the cloning process",
+   	({"capsules", "capsule"}),
+	"The chemicals from the vats are formulated in these capsules in\n" +
+	"accordance with the data stored by the computers on the patients\n" +
+	"genetic profile. The cloning process can then begin",
+	"northern wall",
+	"The wall is covered with a multitude of highly sophisticated\n" +
+	"electronic control systems, and thousands of wires and cables",
+   	"east wall",
+	"A small information monitor firmly attached to the wall",
+  	({"monitor", "computer monitor", "computer", "information monitor"}),
+	"    ---------------------------------------------------------------   \n" +
+	"    |  _________________________________________________________  |   \n" +
+	"    | |                                                         | |   \n" +
+	"   /| |                                                         | |\\  \n" +
+	"  |-| |                                                         | |-| \n" +
+	"  |-| |        WELCOME TO ACI (ABACUS CLONING INDUSTRIES)       | |-| \n" +
+	"  |_| |    We provide cloning technologies for those who have   | |_| \n" +
+	"  | | |    ceased to function. If you require our services      | | | \n" +
+	"  |_| |    please push the red button, as indicated on the      | |_| \n" +
+	"  \\| |    control systems.                                     | |/  \n" +
+	"    | |                                                         | |   \n" +
+	"    | |    *************************************************    | |   \n" +
+	"    | |    * WARNING:  Cloning is not exact, you will get  *    | |   \n" +
+	"    | |    *           an inferior copy of yourself.       *    | |   \n" +
+	"    | |    *************************************************    | |   \n" +
+	"    | |                                                         | |   \n" +
+	"    | |                                                         | |   \n" +
+	"    | |                                                         | |   \n" +
+	"    | ----------------------------------------------------------  |   \n" +
+	"    ---------------------------------------------------------------   \n" +
+	"     \\========================================================== /    \n" +
+	"      \\_________________________________________________________/ ",
+	({"small vdu","vdu"}), "#show_clock",
+   	"map", "#map",
+   	({"wires", "wire", "cable", "cables", "wires and cables"}),
+	"A vast collection of wires and cables carrying the data, power\n" +
+	"and chemicals required to initiate a successful cloning procedure",
+		});
+    dest_dir = ({
+	ROOM+"west_street1","south","#halloween",
+	"domains/Gangs/TG/room/main", "down", "#halloween",
+		});
+}
+
+halloween(){
+       return 0;
+}
+
+
+init()
+{
+  ::init();
+    add_action("clone", "press");
+    add_action("clone", "push");
+    add_action("pray", "pray");
+    add_action("pray", "rebuild");
+    add_action("pray", "restore");
+    add_action("pray", "regenerate");
+    add_sound("hum", "The gentle hum of electronic machinery.");
+
+    if (!this_player()->query_gender())
+	this_player()->set_gender(1);
+
+    if (!inetd_loaded)
+        "/obj/daemons/inetd"->force_load(inetd_loaded++);
+
+    if (!reboot_loaded)
+        "obj/daemons/rebootd"->force_load(reboot_loaded++);
+
+    if(!this_player()->query_npc() && this_player()->query_level() < SCI_LEVEL)
+      if(!present("radio",this_player())) 
+        return move_object(clone_object ("/std/object/commradio"),this_player());
+
+}
+
+show_clock()
+{
+    write("Nuclear War uptime    : " + dstring(dtime(uptime(), 0)) + "\n");
+    write("Time since reset      : " + dstring(dtime(time() - time_from_reset, 0)) + "\n");
+    printf("Number of users       : %d\n", sizeof(users()));
+    if (this_player()->query_level() < SCI_LEVEL)
+	return;
+         if (last_reset_cycle)
+           write("Reset cycle           : " + last_reset_cycle + "\n");
+             write("Free block list length: " + list_length + "\n");
+        return;
+}
+
+map()
+{
+    cat("/doc/city_map");
+    return 1;
+}
+
+pray()
+{
+    return write("Examine the cloning facilities instead.\n");
+}
+
+clone(str)
+{
+    if (find_call_out("cloning") >= 0) {	/* The call_out already
+						 * exists. */
+	write(myname + " is presently using the cloning process.\n");
+	return 1;
+    }
+    if (!str) {
+	notify_fail("What do you want to press?\n");
+	return 0;
+    }
+    if (str != "button" && str != "red button") {
+	if (this_player()->query_ghost()) {
+	    notify_fail("Your hand passes right through the " + str + ".\n");
+	    return 0;
+	} else
+	    return;
+    }
+    myname = capitalize(this_player()->query_real_name());
+    say(myname + " presses the cloning button.\n");
+    write("You press the cloning button.\n");
+    if (!this_player()->query_ghost()) {
+	tell_room(environment(this_player()),
+	"A voice from the computer says: " + myname + " is still alive!\n");
+	return 1;
+    }
+    tell_room(environment(this_player()),
+	    "An alarm starts to sound and a mechanized voice announces:\n" +
+	      "     " + myname + ", please do not move from your present position. If\n" +
+	      "     you leave this facility before the process is done, the cloning\n" +
+	      "     process will cease.\n");
+    call_out("cloning", 3, 0);
+    return 1;
+}
+
+cloning(arg)
+{
+    if (!stringp(myname))
+	return;
+    if (!present(lowercase(myname), this_object())) {
+	tell_room(this_object(),
+		  "An alarm sounds again, and the voice announces:\n" +
+		  "     " + myname + " is leaving the facility.... Terminating process.\n");
+	return;
+    }
+    switch (arg) {
+    case 0:
+	tell_room(environment(this_player()),
+	      "You hear the voice announce: Cloning process commencing.\n");
+	break;
+    case 1:
+	say("A scanner appears from an opening in the wall and examines " +
+	    myname + "'s mist.\n", this_player());
+	write(
+	     "A scanner appears from an opening in the wall and examines " +
+		 "you.\n");
+	break;
+    case 2:
+	tell_room(environment(this_player()),
+		  "The voice announces: Cloning process done.\n");
+	break;
+    default:
+	say("The capsule hisses open, and " + myname + "'s mist enters " +
+	    this_player()->query_possessive() + " clone.\n", this_player());
+	write(
+	      "You see the capsule hiss open, and you enter your clone.\n");
+	      if(FREE_KILL){
+		this_player()->set_outlaw(1);
+		}
+	return call_other(this_player(), "remove_ghost", 1);
+    }
+    call_out("cloning", 3, ++arg);
+    return 1;
+}
+
+prevent_look_at_inv(str)
+{
+    return str != 0;
+}
+
+query_peace()
+{
+    return 1;
+}
+
+query_snoop_protected()
+{
+    return 1;
+}

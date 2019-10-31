@@ -245,3 +245,4 @@ void next_stage(int count, object player) {
       player->message("Done.");
    }
 }
+

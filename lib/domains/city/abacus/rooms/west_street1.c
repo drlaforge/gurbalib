@@ -31,7 +31,7 @@ void setup(void) {
     set_light(1);
 	set_exits((["west" : ROOMS + "viaduct",
 				"east" : ROOMS + "west_square2",
-				"north" : RSTART + "start",
+				"north" : ROOMS + "church",
 				]));
 	
     add_item("road","It looks very worn.");

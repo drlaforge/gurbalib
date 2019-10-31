@@ -12,8 +12,8 @@
 
 #include "/kernel/include/local_config.h"
 
-#define LIB_NAME  "GurbaLib"
-#define LIB_VERSION "v0.50"
+#define LIB_NAME  "NukeLib"
+#define LIB_VERSION "v0.1"
 
 #define TRUE  1
 #define FALSE 0
@@ -23,7 +23,7 @@
 #define ALIAS_D      "/sys/daemons/alias_d"
 #define USER_D       "/sys/daemons/user_d"
 #define DOMAIN_D     "/sys/daemons/domain_d"
-#define WIZLOG_D        "/daemons/wizlog_d"
+#define WIZLOG_D      "/daemons/wizlog_d"
 #define LAST_D       "/daemons/last_d"
 #define EVENT_D      "/daemons/event_d"
 #define EMOTE_D      "/daemons/emote_d"
@@ -50,6 +50,7 @@
 #define LINKDEAD_D   "/sys/daemons/linkdead_d"
 #define INIT_D       "/sys/daemons/init_d"
 #define TOP_SCORE_D  "/daemons/top_score_d"
+#define AREALDR_D "/daemons/arealdr_d"
 
 #define CONNECTION      "/kernel/obj/net/connection"
 #define PORT            "/kernel/obj/net/port"

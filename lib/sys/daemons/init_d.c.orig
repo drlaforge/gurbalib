@@ -36,7 +36,6 @@ private string *get_default_objects(void) {
       PARSE_D, 
       QUEST_D,
       LINKDEAD_D,
-      AREALDR_D,
       STARTING_ROOM
    });
 
@@ -120,7 +119,6 @@ static void create(void) {
          }
       }
    }
-   DRIVER->load_areas();
    DRIVER->init_done();
 }
 
@@ -140,4 +138,3 @@ int file_is_daemon(string str) {
 
    return 0;
 }
-

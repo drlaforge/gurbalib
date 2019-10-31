@@ -529,11 +529,8 @@ void input_name(string str) {
             return;
          }
 
-         send_message("New character.\n"+
-         "When creating a new character, realize that this is a post-apocalyptic,\n"+
-         "cyber-punk theme MUD. Meaning, names like \"dragonsbane\" don't exactly\n"+
-         "fit. The administration reserves the right to change or delete any name.\n"+
-                  "Do you want to create the new character, \""+user_name+"\"? [y/n]\n");
+         send_message("Ah. New player.\n");
+         send_message("Is '" + user_name + "' correct (y/n)? : ");
          player->input_to_object(this_object(), "input_correct_name");
       }
    }
@@ -542,6 +539,7 @@ void input_name(string str) {
 void input_correct_name(string str) {
    if (!str || str == "") {
       send_message("Please enter 'y' or 'n' : ");
+      send_message("Is '" + user_name + "' correct (y/n)? : ");
       player->input_to_object(this_object(), "input_correct_name");
    }
 
@@ -653,9 +651,9 @@ void input_check_passwd(string str) {
       player->input_to_object(this_object(), "input_check_passwd");
    } else {
       if (USER_D->login(user_name, str)) {
-         send_message("Welcome CyberPunk!");
-         send_message("Please enter your email address : ");
-   player->input_to_object(this_object(), "input_get_email");
+         send_message("\nPlease enter your real name : ");
+         send_message(1);
+         player->input_to_object(this_object(), "input_get_real_name");
       } else {
          send_message("\nThe passwords don't match.\n");
          send_message("Goodbye!!!\n");
@@ -666,6 +664,13 @@ void input_check_passwd(string str) {
    }
 }
 
+void input_get_real_name(string str) {
+   player->set_realname(str);
+
+   send_message("Please enter your email address : ");
+   player->input_to_object(this_object(), "input_get_email");
+}
+
 void input_get_email(string str) {
    player->set_email(str);
    send_message("Please enter your website : ");
@@ -674,13 +679,14 @@ void input_get_email(string str) {
 
 void input_get_website(string str) {
    player->set_website(str);
-   send_message("\nWhat's your gender? (m)ale or (f)emale:");
+
+   send_message("\nEnter your gender (male/female/neuter) : ");
    player->input_to_object(this_object(), "input_get_gender");
 }
 
 void input_get_gender(string str) {
    if (!str || str == "") {
-      send_message("Please enter your gender (male/female) : ");
+      send_message("Please enter your gender (male/female/neuter) : ");
       player->input_to_object(this_object(), "input_get_gender");
       return;
    }
@@ -690,24 +696,66 @@ void input_get_gender(string str) {
       player->set_gender("male");
    } else if (str == "f" || str == "female") {
       player->set_gender("female");
+   } else if (str == "n" || str == "neuter") {
+      player->set_gender("neuter");
    } else if (str == "quit") {
       write("Goodbye!!!\n");
       destruct_object(player);
       destruct_object(this_object());
       return;
    } else {
-      send_message("Please use 'male' or 'female'.\n");
+      send_message("Please use 'male', 'female' or 'neuter'.\n");
+      send_message("Please enter your gender (male/female/neuter) : ");
       player->input_to_object(this_object(), "input_get_gender");
       return;
    }
-   player->set_race("human", 1);
+   write_races();
+   send_message("Please choose one of the races, or type 'info <race>' : ");
+   player->input_to_object(this_object(), "input_get_race");
+}
+
+void input_get_race(string str) {
+   if (!str || str == "") {
+      write_races();
+      send_message("Please choose one of the races, or type 'info <race>' : ");
+      player->input_to_object(this_object(), "input_get_race");
+      return;
+   }
+   str = lowercase(str);
+
+   if (str == "quit") {
+      write("Goodbye!!!\n");
+      destruct_object(player);
+      destruct_object(this_object());
+      return;
+   }
+
+   if ( (strlen(str) > 5) && (str[0..3] == "info") ) {
+      string r;
+
+      r = str[5..( strlen(str) - 1)];
+      if (RACE_D->is_race( r ) ) {
+         send_message( RACE_D->query_race_long(r) + "\n\n" +
+            "Please choose one of the races, or type 'info <race>' : ");
+         player->input_to_object(this_object(), "input_get_race");
+         return;
+      }
+   }
+         
+   if (!RACE_D->is_race(str)) {
+      send_message("Please choose one of the races, or type 'info <race>' : ");
+      player->input_to_object(this_object(), "input_get_race");
+      return;
+   }
+
+   player->set_race(str, 1);
+
    player->set_hp(player->query_max_hp());
    player->set_mana(player->query_max_mana());
    player->set_end(player->query_max_end());
    player->save_me();
    login_user();
 }
-
 
 void set_player(object p) {
    player = p;
@@ -759,4 +807,3 @@ static void upgraded(void) {
 int online(void) {
    return logged_in;
 }
-
