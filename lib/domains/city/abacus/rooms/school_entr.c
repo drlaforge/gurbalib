@@ -5,39 +5,29 @@ inherit "std/room";
 void setup(void) {
    
   set_light(1);
-  short_desc = "old school building entrance";
-  
-  set_long_f(
+  set_short("old school building entrance");
+  set_long(
     "You stand in the entrance of a large school building. Although it may "+
     "have been a pleasant place in the past, years of neglect have made it "+
     "very unpleasant. There is bad smelling grime on the floor and ceiling, "+
     "and the walls are completely covered with various forms of grafitti. "+
     "Garbage and debris partially cover the floor. The doorway to the south "+
     "used to have a door, but now it is just plank of wood on hinges.\n");
-  dest_dir = 
-    ({
-      ROOM+"adv_guild.c", "south",
-      ROOM+"central_square.c", "north",
-      ROOM+"sci_callroom","west",
-      ROOM+"donation","east",
-    });
-  items_arr = ({
-    ({"walls","wall"}),
-      "The walls are dirty and covered with grafitti.",
-    "grafitti", "#grafitti",
-    "debris", "They look like some pieces of the ceiling.",
-    "garbage", "You have no idea where the garbage came from.",
-    "grime", 
-      "It looks like a combination of dirt and other putrid things.",
-      "@It smells absolutely awful.",
-    "doorway",
-      "Now that it doesn't have a door, maybe it is not a doorway anymore.",
-    ({"plank","plank of wood","wood","hinges"}),
-      "The plank of wood on the hinges is the only thing left of the door.",
-    });
+
+  set_exits((["south" : ROOMS+"adv_guild.c",
+      "north" : ROOMS+"central_square.c",
+      "west" : ROOMS+"sci_callroom",
+      "east" : ROOMS+"donation"]));
+  add_item("walls","wall","The walls are dirty and covered with grafitti.");
+    add_item("debris", "They look like some pieces of the ceiling.");
+    add_item("garbage", "You have no idea where the garbage came from.");
+    add_item("grime","It looks like a combination of dirt and other putrid things.");
+    add_item("doorway","Now that it doesn't have a door, maybe it is not a doorway anymore.");
+    add_item("plank","plank of wood","wood","hinges","The plank of wood on the hinges is the only thing left of the door.");
 }
 
-int grafitti() {
+/*we'll have to rewrite this
+int read_grafitti(void) {
   string text;
   int i;
   i = random(5);
@@ -53,4 +43,5 @@ int grafitti() {
       return 1;
   }
 }
+*/
 

@@ -9,6 +9,7 @@ inherit "/std/modules/m_actions";
 
 static int aggressive, spell_chance, spell_damage;
 static string spell_message;
+string virtual_race;
 
 void create(void) {
    int x;
@@ -198,4 +199,12 @@ void add_coins(string type, int amt) {
    }
 }
 
+void set_virtual_race(string str)
+{
+virtual_race = str;
+}
 
+string query_virtual_race()
+{
+return virtual_race;
+}

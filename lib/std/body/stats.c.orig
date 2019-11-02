@@ -188,40 +188,9 @@ int query_statbonus(string name) {
 }
 
 void initialize_base_stats(void) {
-   int i, sOK, sum, *s;
-   object race;
-
-   race = this_object()->query_race_object();
-
-   sOK = FALSE;
-
-   while (!sOK) {
-
-      s = ({ "0", "0", "0", "0", "0", "0" });
-      i = 0;
-      for (i = 0; i < 6; i++) {
-         s[i] = random(race->query_base_stat_maximum(VALID_STATS[i]) -
-            race->query_base_stat_minimum(VALID_STATS[i]) + 1) +
-            race->query_base_stat_minimum(VALID_STATS[i]);
-      }
-
-      if (!race->is_monster_race()) {
-         sum = 0;
-         for (i = 0; i < 6; i++) {
-            sum += s[i];
-         }
-
-         if (sum > 75) {
-            sOK = 1;
-         }
-      } else {
-         sOK = 1;
-      }
-   }
-
+int i;
    for (i = 0; i < 6; i++) {
-      this_object()->set_base_stat(VALID_STATS[i], s[i] + 
-         race->query_stat_mod(VALID_STATS[i]));
+      this_object()->set_base_stat(VALID_STATS[i], 1);
    }
 }
 
@@ -255,3 +224,4 @@ void initialize_stats(void) {
    this_object()->initialize_bonus_stats();
    initialize_stat_dependant_variables();
 }
+

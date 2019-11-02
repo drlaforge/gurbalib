@@ -206,16 +206,16 @@ void initialize_stat_dependant_variables(void) {
    int tmp, stat;
 
    tmp = this_object()->query_base_stat("con");
-   stat = 20 + tmp;
+   stat = 60 + tmp*15;
    this_object()->set_max_hp(stat);
 
    tmp = this_object()->query_base_stat("wis");
-   stat = 20 + tmp;
+   stat = 60 + tmp*15;
    this_object()->set_max_mana(stat);
 
    tmp = this_object()->query_base_stat("con") +
       this_object()->query_base_stat("dex");
-   stat = 20 + tmp;
+   stat = 60 + tmp*15;
    this_object()->set_max_end(stat);
 }
 

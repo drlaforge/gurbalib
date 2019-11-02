@@ -58,7 +58,6 @@ int verbose_errors;     /* 1 for longer error codes */
 int display_caught;     /* 1 to show caught runtime errors */
 static mixed menu_data;		/* temp storage for menu system */
 int muzzle;			/* if 0 we are allowed to shout. */
-int stat_points; /*points for stat improvements*/
 
 string query_name(void);
 
@@ -799,15 +798,6 @@ static void do_look_obj(object obj) {
 static void do_look_liv(object obj) {
    int i, flag;
    object *objs;
-string race, virtual_race;
-virtual_race = obj->query_virtual_race();
-
-if(empty_str(virtual_race))
-{
-race = obj->query_race();
-} else {
-race = virtual_race;
-}
 
    this_environment()->tell_room(this_player(), this_player()->query_Name() +
       " looks at " + capitalize(obj->query_id()) + ".\n");
@@ -815,9 +805,8 @@ race = virtual_race;
    write("%^PLAYER%^" + obj->query_short() + "%^RESET%^\n");
 
    write(obj->query_long());
-   write("A " + obj->query_gender() + " " + race +
+   write("A " + obj->query_gender() + " " + obj->query_race() +
       " who is " + obj->query_status() + "\n");
-
 
    flag = 0;
    objs = obj->query_inventory();
@@ -1379,9 +1368,3 @@ void update_internal_weight(void) {
 }
 
 string query_virtual_race(void) {return ""; }
-
-void set_stat_points(int amt) {
-stat_points = amt;
-}
-
-int query_stat_points(void) {return stat_points; }

@@ -104,18 +104,10 @@ void increase_expr(int expr) {
    if (experience < 0) {
       experience = 0;
    }
-   if (ready_for_next_level()) {
-      increase_level();
-      write("Congratulations, you just went up a level...\n");
-      level += 1;
-   }
 }
 
 void decrease_expr(int expr) {
-   if (expr > 0) {
-      expr = expr * -1;
-   }
-   experience -= expr;
+   experience += (expr*-1);
    if (experience < 0) {
       experience = 0;
    }
