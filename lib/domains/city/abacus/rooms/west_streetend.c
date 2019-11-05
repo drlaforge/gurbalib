@@ -1,33 +1,32 @@
-/* Wishbone 12/96 */
+#include "../area.h"
 
 inherit "std/room";
-#include "../area.h" 
 
 void setup(void) {
-     
-
-    set_outdoors(1); 
-    set_light(1); 
-    short_desc = "intersection on West Street";
+	
+	set_light(1);
+    set_short("intersection on West Street");
  
-    set_long_f(
+    set_long(
 	"You're at an intersection on West Street. It leads east "+
 	"into town, and west to the old suburbs. "+
 	"There is a dark alley leading northwards to the Devil's "+
 	"territory. There is also the park entrance to the south.\n");
-    dest_dir = ({
-	ROOM+"alley1","north",
-	ROOM+"park/park0","south",
-	ROOM+"west_street4","east",
-       ROOM+"west3","west",
-		});
-    items_arr = ({
-	({"west street","street"}),"You're standing on it",
-	"intersection","An intersection on West Street",
-	({"alley","dark alley"}),
-	"The alley leads into the Devil's territory",
-	({"park","entrance","park entrance"}),
-	"The park lies to the south",
-	"territory","The territory of the Devil's gang",
-		});
+    
+	add_exit("north", ROOMS + "alley1");
+	add_exit("south", "#my_park");
+	add_exit("east", ROOMS + "west_street4");
+	add_exit("west", ROOMS + "west3");
+
+	add_item("west street","street","You're standing on it");
+	add_item("intersection","An intersection on West Street");
+	add_item("alley","dark alley", "The alley leads into the Devil's territory");
+	add_item("park","entrance","park entrance", "The park lies to the south");
+	add_item("territory","The territory of the Devil's gang");
 }
+
+int my_park()
+	{
+		write("The gate to the park is locked and you can't find a way to get around it");
+		return 1;
+	}
