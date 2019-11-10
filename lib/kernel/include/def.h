@@ -54,6 +54,7 @@
 #define STD_W_MONSTER	"/std/walkingmonster.c"
 #define STD_S_MONSTER	"/std/smartmonster.c"
 #define STD_SELL_MONSTER  "/std/shop_monster.c"
+#define STD_SIGN	 "/std/sign"
 
 /*corpses*/
 #define STD_CORPSE       "/std/corpse/corpse.c"

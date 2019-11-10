@@ -1,22 +1,18 @@
-inherit "std/room";
 #include "../area.h"
+
+inherit STD_ROOM; 
 
 void setup(void) {
      
-
-    set_outdoors(1);
+    /*set_outdoors(1);*/
     set_light(1);
-    short_desc = "Angels boulevard";
-    
- 
-    long_desc = 
-        "You are walking along the Angels boulevard.\n"
+    set_short("Angels boulevard");
+    set_long("You are walking along the Angels boulevard.\n"
         + "It continues to the north and the East street is\n"
-        + "to the south.\n";
-    dest_dir = 
-        ({
-        ROOM+"east_square3", "south",
-        ROOM+"boul2", "north",
-        });
+        + "to the south.\n");
+    
+	set_exits((["south" : ROOMS + "east_square3",
+				"north" : ROOMS + "boul2",
+				]));
 }
 

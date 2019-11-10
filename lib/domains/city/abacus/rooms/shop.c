@@ -4,7 +4,7 @@ to protect himself. Mindmaster Mastermind 971012 */
 /* Shopkeeper timed, masked calc_val for night keeper, more colors - Darkman 020613 */
 
 #include <tune.h>
-inherit ROOM+"std_shop";
+inherit ROOMS +"std_shop";
 
 string get_rand_color() {
    string *colors;

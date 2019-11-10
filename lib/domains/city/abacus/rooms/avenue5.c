@@ -17,6 +17,6 @@ void setup(){
 	add_item("avenue", "An avenue going east and west");
 	
 	set_exits((["east" : ROOMS+"avenue4",
-				"west" : ROOMS+"avenue6"]));
+		    "west" : ROOMS+"avenue6"]));
 }
 

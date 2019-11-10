@@ -47,3 +47,39 @@ private int read_list(string str)
   return 1;
 }
 
+private int buy_first_aid(string str)
+{
+  notify_fail("Buy what?\n");
+  if(!str || member_array(str,({
+     "duoderm",
+     "first aid",
+     "first-aid",
+     "kit",
+     })) < 0) return 0;
+  if(kitt < 1)
+    {
+      W("The machine is out of Duoderm First-aid Kits.\n" +
+        "Why don't you come back later?\n");
+      S("The machine appears to be out of Duoderm First-aid Kits.\n");
+      return 1;
+    }
+  if(TP->query_money() < KIT_COST) 
+    {
+      W("You don't have enough money!\n");
+      S(TP->QN+" is a bit low on money.\n");
+      return 1;
+    }
+  kit = clone_object(KIT_PATH);
+  if(obj->move(kit,TP)) 
+    {
+      W("The Duoderm First-aid Kit is too heavy for you!\n");
+      S(TP->QN+" finds the Duoderm First-aid Kit too heavy.\n");
+      destruct(kit);
+      return 1;
+    }
+  W("You buy a Duoderm First-aid Kit from the machine.\n");
+  S(TP->QN + " buys a Duoderm First aid kit from the machine.\n");
+  TP->add_money(-KIT_COST);
+  kitt--;
+  return 1;
+}

@@ -20,6 +20,10 @@ int *lvl_experience;
 int *tot_exps;
 string **titles;
 
+int cost_for_level(string str);
+int advance(string str);
+
+
 void setup(void)
 {
 titles = ({({"has no level", "has no level"}),
@@ -43,6 +47,10 @@ titles = ({({"has no level", "has no level"}),
 ({"the player", "the player"}),
 ({"the player", "the player"}),
 ({"the player", "the player"})});
+set_short("Standard guild room.");
+set_long("Standard guild room, send a bug report if you see this message.");
+add_action("cost_for_level", "cost");
+add_action("advance", "advance");
 }
 
 
@@ -52,7 +60,6 @@ if (gender == "male") return titles[level][0];
 if (gender == "female") return titles[level][1];
 if (gender == "neuter") return titles[level][0];
 }
-
 
 
 int query_experience(int level)
@@ -138,6 +145,11 @@ int advance(string str)
     int i; int cost;
     string blah;
 
+    if (empty_str(str))
+    {
+      write ("Advance what?");
+      return 1;
+    }
     if( query_guest(TP) )
     {
 	write("Sorry guests can't advance.\n");
@@ -146,17 +158,17 @@ int advance(string str)
     }
     level=LEVEL;
     
-    if(!str || str=="level")
+    if(str=="level")
     {
 	if(level>=ROOKIE_LEVEL) 
 {
 	    write("Scientists can't advance here.\n");
-	    return 0;
+	    return 1;
 }
 	if(level==VET_LEVEL)
 {
 	    write("You can't advance your level more.\n");
-	    return 0;
+	    return 1;
 }
 	if(try_advance(cost = query_experience(level+1))) 
 	{
@@ -265,11 +277,13 @@ int advance(string str)
 	break;
     default:
 	write("You can't advance that here.\n");
+	return 1;
     }
+return 1; /*bug in lib? If returns with 0 it gets called twice - Exash 19.11.09*/
     TP->save_me();
 }
 
-int cost_for_level(void)
+int cost_for_level(string str) /*it just ignores parameter, not needed, just because of command*/
 {
     int i, statpoints;
     statpoints = TP->query_stat_points();
@@ -304,7 +318,6 @@ if(LEVEL<=(GEN_LEVEL-1))
     write("You have 1 more stat to raise this level.\n");
   if(statpoints>1)
     write("You have "+statpoints+" more stats to raise this level.\n");
-    return 0;
   }
 
     if(LEVEL == (VET_LEVEL)) {

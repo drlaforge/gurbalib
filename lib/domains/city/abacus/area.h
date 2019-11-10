@@ -1,5 +1,5 @@
-/*#include <def.h>
-#include <tune.h>*/
+#include <def.h>
+/*#include <tune.h>*/
 
 #define NUKEBACKBONE "/domains/city/abacus/"
 #define ARMOUR    NUKEBACKBONE+"armour/"
@@ -8,7 +8,9 @@
 #define ROOMS     NUKEBACKBONE+"rooms/"
 #define WEAPON    NUKEBACKBONE+"weapon/"
 
-#define RSTART     "/domains/required/rooms/"
+
+
+
 
 /*area loading*/
 #define LOAD_CEM 1

@@ -1,3 +1,5 @@
+#include <tune.h>
+
 inherit M_COMMAND;
 
 string *usage(void) {
@@ -35,7 +37,14 @@ static void main(string str) {
    mixed *money;
    object obj;
    string age, *l;
+int *lvl_experience;
 
+	lvl_experience=allocate(VET_LEVEL);
+	lvl_experience[VET_LEVEL-1]=SCIENTIST_EXPERIENCE;
+	for(i=18;i>0;i--) {
+	    lvl_experience[i]=lvl_experience[i+1]*2/3;
+    }
+	lvl_experience[0]=0;
    if (!alsos) {
       setup_alsos();
    }
@@ -79,7 +88,7 @@ static void main(string str) {
    age = obj->query_age();
    w = this_player()->query_internal_weight();
    mw = this_player()->query_internal_max_weight();
-   next_xp = level * level * 2000;
+   next_xp = lvl_experience[level+1];
 
    l = ({ "[ " + obj->query_name() + " ] " + obj->query_title() });
    l += ({ "A " + obj->query_gender() + " " + obj->query_race() +
@@ -98,11 +107,11 @@ static void main(string str) {
    l += ({ "Constitution:  " + obj->query_stat("con") +
       "\t\t" + "Level      :   " + level });
    l += ({ "Charisma    :  " + obj->query_stat("cha") +
-      "\t\t" + "Experience :   " + add_comma("" + expr) + "  (" +
+      "\t\t" + "Experience :   " +expr + "  (" +
       percentage(expr, next_xp) + "%)" });
    l += ({ "Encumberance:  " + w + "/" + mw + " (" +
       percentage(w, mw) + "%)\tExp. needed:   " +
-      add_comma("" + (next_xp - expr)) + "\n"
+      (next_xp - expr) + "\n"
       });
 
    l += ({ "Kills: " + add_comma("" + obj->query_kills()) + " " +
